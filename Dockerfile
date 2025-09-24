@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     wget \
     gnupg \
-    libxss1 libasound2 libnss3 libatk1.0-0 libgtk-3-0 libdrm2 libgbm1 \
+    libxss1 libnss3 libatk1.0-0 libgtk-3-0 libdrm2 libgbm1 \
     --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
