@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libatk1.0-0 libgtk-3-0 libasound2 libdrm2 libgbm1 \
     libxcomposite1 libxrandr2 libxdamage1 libxtst6 \
     libpci3 libatspi2.0-0 fonts-liberation libappindicator3-1 \
+    libsecret-common libsecret-1-0 && \
     --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
