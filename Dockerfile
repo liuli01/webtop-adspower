@@ -1,27 +1,34 @@
 # 基于 linuxserver 的 webtop ubuntu 变体
-FROM ghcr.io/linuxserver/webtop:ubuntu-xfce
+FROM ghcr.io/linuxserver/webtop:debian-xfce
 
+# 设置非交互模式，避免安装过程中出现提示
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 必要依赖（示例，可能根据 AdsPower 的依赖需要调整）
+# 安装依赖和 Dolphin{anty}
 RUN apt-get update && apt-get install -y \
-    ca-certificates \
     wget \
     gnupg \
-    libxss1 libnss3 libatk1.0-0 libgtk-3-0 libdrm2 libgbm1 \
+    ca-certificates \
+    libnss3 \
+    libxss1 \
+    libatk1.0-0 \
+    libgtk-3-0 \
+    libasound2 \
+    libdrm2 \
+    libgbm1 \
+    libxcomposite1 \
+    libxrandr2 \
+    libxdamage1 \
+    libxtst6 \
+    libpci3 \
+    libatspi2.0-0 \
+    fonts-liberation \
+    libappindicator3-1 \
     --no-install-recommends && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    wget https://dolphin-anty-cdn.com/anty-app/dolphin-anty-linux-amd64-latest.deb && \
+    dpkg -i dolphin-anty-linux-amd64-latest.deb && \
+    apt-get install -f -y
 
-# 下载 AdsPower 安装包
-RUN wget -O /tmp/AdsPower.deb https://version.adspower.net/software/linux-x64-global/7.7.18/AdsPower-Global-7.7.18-x64.deb
-
-# 拷贝并设置启动脚本
-COPY start-adspower.sh /usr/local/bin/start-adspower.sh
-RUN chmod +x /usr/local/bin/start-adspower.sh
-
-# 可选：移除自带 chromium（如果镜像里有），避免冲突
-# RUN apt-get remove -y chromium-browser chromium || true
-
-# 入口：执行我们的启动脚本（脚本最后会 exec /init 保持 webtop 行为）
-ENTRYPOINT [ "/usr/local/bin/start-adspower.sh" ]
-CMD [ ]
+# 设置启动命令，启动 Dolphin{anty}
+ENTRYPOINT ["dolphin_anty", "--no-sandbox"]
