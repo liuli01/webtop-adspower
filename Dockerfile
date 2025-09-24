@@ -1,5 +1,5 @@
 # 基于 linuxserver 的 webtop ubuntu 变体
-FROM ghcr.io/linuxserver/webtop:ubuntu-22.04
+FROM ghcr.io/linuxserver/webtop:ubuntu-xfce
 
 ENV DEBIAN_FRONTEND=noninteractive
 
