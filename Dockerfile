@@ -10,18 +10,13 @@ RUN apt-get update && apt-get install -f \
     rm -rf /var/lib/apt/lists/*
 
 # 下载并安装 Dolphin{anty}
-RUN wget -O /tmp/dolphin-anty.deb https://dolphin-anty-cdn.com/anty-app/dolphin-anty-linux-amd64-latest.deb && \
+RUN curl -L -o /tmp/dolphin-anty.deb https://dolphin-anty-cdn.com/anty-app/dolphin-anty-linux-amd64-latest.deb && \
     dpkg -i /tmp/dolphin-anty.deb || apt-get install -f -y && \
     rm /tmp/dolphin-anty.deb
 
-
-# 卸载Chromium
-RUN apt-get remove -y chromium && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
-# 桌面快捷方式dolphin_anty.desktop增加启动参数
-# RUN sed -i 's|Exec=dolphin_anty|Exec=dolphin_anty --no-sandbox|g' /usr/share/applications/dolphin_anty.desktop
+# 如果Chromium已安装，则重命名以避免冲突，并创建指向 Dolphin{anty} 的符号链接
+RUN if [ -f /usr/bin/chromium ]; then mv /usr/bin/chromium /usr/bin/chromium.bak; fi && \
+    ln -s /usr/bin/dolphin_anty /usr/bin/chromium
 
 # 创建启动脚本，带 --no-sandbox 参数
 RUN echo '#!/bin/bash\nexec dolphin_anty --no-sandbox "$@"' > /usr/local/bin/dolphin-anty-wrapper && \
